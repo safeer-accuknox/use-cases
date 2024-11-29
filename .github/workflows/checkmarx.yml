@@ -23,7 +23,7 @@ jobs:
           cx_client_id: ${{ secrets.CX_CLIENT_ID }}
           cx_client_secret: ${{ secrets.CX_CLIENT_SECRET }}
           cx_tenant: ${{ secrets.CX_TENANT }}
-          additional_params: --report-format sarif --output-path .
+          additional_params: --scan-types sca --report-format sarif --output-path .
 
       - name: Fix SARIF file levels
         run: |
