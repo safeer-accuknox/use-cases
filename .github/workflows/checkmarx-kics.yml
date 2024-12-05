@@ -1,4 +1,4 @@
-name: Checkmarx Sarif Integration for SCA
+name: Checkmarx Sarif Integration for KICS
 
 on:
   push:
