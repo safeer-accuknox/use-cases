@@ -2,7 +2,7 @@ name: Checkmarx Sarif Integration for SCA
 
 on:
   push:
-    branches: [ "sca" ]
+    branches: [ "cmx-sca" ]
 
 permissions:
   security-events: write
