@@ -9,11 +9,29 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+        name: Download Scanner
+        command: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin || true
+      - run:
           name: Build Docker image
           command: |
-            TAG=$CIRCLE_BUILD_NUM
-            docker build -t circleci-container-scan:$TAG .
-
+            IMAGE_NAME=circleci-container-scan:$CIRCLE_BUILD_NUM
+            docker build -t $IMAGE_NAME -f Dockerfile .
+            echo "export IMAGE_NAME=$IMAGE_NAME" >> $BASH_ENV
+      - run:
+          name: Scan Docker image
+          command: |
+            set +e  # Allow commands to fail without stopping the script
+            trivy image --exit-code 1 --severity "UNKNOWN, LOW, MEDIUM, HIGH, CRITICAL" -f json $IMAGE_NAME -o results.json --quiet
+            TRIVY_EXIT_CODE=$?
+            echo "export TRIVY_EXIT_CODE=$TRIVY_EXIT_CODE" >> $BASH_ENV
+      - run:
+          name: Failing Pipeline If Scan Failed
+          command: |
+            if [ "$TRIVY_EXIT_CODE" -ne 0 ]; then
+              echo "Scan failed. Exiting with failure."
+              exit 1
+            fi
 workflows:
   accuknox-container-scan:
     jobs:
