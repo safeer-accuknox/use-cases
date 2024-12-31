@@ -9,9 +9,9 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-        name: Download Scanner
-        command: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin || true
+          name: Download Scanner
+          command: |
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin || true
       - run:
           name: Build Docker image
           command: |
@@ -36,7 +36,7 @@ workflows:
   accuknox-container-scan:
     jobs:
       - container-scan:
-        filters:
-          branches:
-            only:
-            - container
+          filters:
+            branches:
+              only:
+              - container
