@@ -4,9 +4,6 @@ jobs:
     working_directory: ./
     docker:
       - image: ghcr.io/bridgecrewio/checkov:3.2.21
-        entrypoint:
-        - '/usr/bin/env'
-        - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
     steps:
       - checkout
       - setup_remote_docker:
