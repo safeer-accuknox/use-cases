@@ -5,9 +5,6 @@ jobs:
       - image: sonarsource/sonar-scanner-cli:latest
     environment:
       GIT_DEPTH: "0"
-      SONAR_TOKEN: ${SONAR_TOKEN}
-      SONAR_HOST_URL: ${SONAR_HOST_URL}
-      SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}
     steps:
       - checkout
       - run:
@@ -28,9 +25,6 @@ jobs:
       - image: cimg/base:current
     working_directory: /app/data/
     environment:
-      SONAR_TOKEN: ${SONAR_TOKEN}
-      SONAR_HOST_URL: ${SONAR_HOST_URL}
-      SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}
       REPORT_PATH: /app/data/
     steps:
       - checkout
