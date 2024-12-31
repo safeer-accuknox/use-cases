@@ -33,6 +33,9 @@ jobs:
       - run:
           name: SAST 
           command: |
+            SQ_URL=${SONAR_HOST_URL}
+            SQ_AUTH_TOKEN=${SONAR_TOKEN}
+            SQ_PROJECTS=${SONAR_PROJECT_KEY}
             python3 /app/sq-job.py
       - run:
           name: Uploading Results
