@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Download Scanner
           command: |
-            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin || true
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
       - run:
           name: Build Docker image
           command: |
