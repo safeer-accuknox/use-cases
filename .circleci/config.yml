@@ -1,46 +1,47 @@
 version: 2.1
 jobs:
-  container-scan:
+  iac-scan:
     working_directory: ./
     docker:
-      - image: cimg/base:current
+      - image: ghcr.io/bridgecrewio/checkov:3.2.21
+        entrypoint:
+        - '/usr/bin/env'
+        - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Download Scanner
-          command: |
-            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
-      - run:
-          name: Build Docker image
-          command: |
-            IMAGE_NAME=circleci-container-scan:$CIRCLE_BUILD_NUM
-            docker build -t $IMAGE_NAME -f Dockerfile .
-            echo "export IMAGE_NAME=$IMAGE_NAME" >> $BASH_ENV
-      - run:
-          name: Scan Docker image
+          name: IaC Scan 
           command: |
             set +e  # Allow commands to fail without stopping the script
-            trivy image --exit-code 1 --severity "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" -f json $IMAGE_NAME -o results.json --quiet
-            TRIVY_EXIT_CODE=$?
-            echo "export TRIVY_EXIT_CODE=$TRIVY_EXIT_CODE" >> $BASH_ENV
+            checkov --compact  --quiet -o json --output-file-path ./results  -d .
+            CHECKOV_EXIT_CODE=$?
+            echo "export CHECKOV_EXIT_CODE=$CHECKOV_EXIT_CODE" >> $BASH_ENV
+      - run:
+          name: Processing results 
+          command: |
+            RESULT_FILE="results/results_json.json"
+            if jq -e 'type == "object"' $RESULT_FILE > /dev/null 2>&1; then
+              jq '[.]' $RESULT_FILE > temp.json && mv temp.json $RESULT_FILE
+            fi
+            jq --arg repoLink "${CIRCLE_REPOSITORY_URL}" --arg branch "${CIRCLE_BRANCH}" '. += [{"details": {"repo": $repoLink, "branch": $branch}}]' $RESULT_FILE > temp.json && mv temp.json results.json
       - run:
           name: Uploading Results
           command: |
-            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=TR&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"results.json"'
+            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=IAC&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"results.json"'
       - run:
           name: Failing Pipeline If Scan Failed
           command: |
-            if [ "$TRIVY_EXIT_CODE" -ne 0 ]; then
+            if [ "$CHECKOV_EXIT_CODE" -ne 0 ]; then
               echo "Scan failed. Exiting with failure."
               exit 1
             fi
 workflows:
-  accuknox-container-scan:
+  accuknox-iac-scan:
     jobs:
-      - container-scan:
+      - iac-scan:
           filters:
             branches:
               only:
-              - container
+              - iac
