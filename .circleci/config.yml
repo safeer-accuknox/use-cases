@@ -11,6 +11,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: test 
+          command: |
+            printenv
+      - run:
           name: Run SonarQube Scanner
           command: |
             sonar-scanner \
