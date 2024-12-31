@@ -22,7 +22,7 @@ jobs:
           name: Scan Docker image
           command: |
             set +e  # Allow commands to fail without stopping the script
-            trivy image --exit-code 1 --severity HIGH -f json $IMAGE_NAME -o results.json --quiet
+            trivy image --exit-code 1 --severity "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" -f json $IMAGE_NAME -o results.json --quiet
             TRIVY_EXIT_CODE=$?
             echo "export TRIVY_EXIT_CODE=$TRIVY_EXIT_CODE" >> $BASH_ENV
       - run:
