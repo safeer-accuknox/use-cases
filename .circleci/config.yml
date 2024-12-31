@@ -1,0 +1,24 @@
+version: 2.1
+jobs:
+  container-scan:
+    working_directory: ./
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            TAG=$CIRCLE_BUILD_NUM
+            docker build -t circleci-container-scan:$TAG .
+
+workflows:
+  accuknox-container-scan:
+    jobs:
+      - container-scan:
+        filters:
+          branches:
+            only:
+            - container
