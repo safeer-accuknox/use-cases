@@ -1,49 +1,60 @@
 version: 2.1
 jobs:
-  iac-scan:
-    working_directory: ./
+  sonarqube-scan:
     docker:
-      - image: ghcr.io/bridgecrewio/checkov:3.2.21
+      - image: sonarsource/sonar-scanner-cli:latest
+    environment:
+      SONAR_USER_HOME: "${CIRCLE_WORKING_DIRECTORY}/.sonar"
+      GIT_DEPTH: "0"
+      SONAR_TOKEN: ${SONAR_TOKEN}
+      SONAR_HOST_URL: ${SONAR_HOST_URL}
+      SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}
+    steps:
+      - checkout
+      - run:
+          name: Run SonarQube Scanner
+          command: |
+            sonar-scanner \
+              -Dsonar.qualitygate.wait=true \
+              -Dsonar.host.url=$SONAR_HOST_URL \
+              -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+              -Dsonar.token=$SONAR_TOKEN \
+              -Dsonar.sources=.
+  accuknox-sast-scan:
+    docker:
+      - image: cimg/base:current
+    working_directory: /app/data/
+    environment:
+      SONAR_TOKEN: ${SONAR_TOKEN}
+      SONAR_HOST_URL: ${SONAR_HOST_URL}
+      SONAR_PROJECT_KEY: ${SONAR_PROJECT_KEY}
+      REPORT_PATH: /app/data/
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Prerequisites
+          name: SAST Scan 
           command: |
-            apt -qq update -y
-            apt install -y jq curl
-      - run:
-          name: IaC Scan 
-          command: |
-            set +e  # Allow commands to fail without stopping the script
-            checkov --compact  --quiet -o json --output-file-path ./results  -d .
-            CHECKOV_EXIT_CODE=$?
-            echo "export CHECKOV_EXIT_CODE=$CHECKOV_EXIT_CODE" >> $BASH_ENV
-      - run:
-          name: Processing results 
-          command: |
-            RESULT_FILE="results/results_json.json"
-            if jq -e 'type == "object"' $RESULT_FILE > /dev/null 2>&1; then
-              jq '[.]' $RESULT_FILE > temp.json && mv temp.json $RESULT_FILE
-            fi
-            jq --arg repoLink "${CIRCLE_REPOSITORY_URL}" --arg branch "${CIRCLE_BRANCH}" '. += [{"details": {"repo": $repoLink, "branch": $branch}}]' $RESULT_FILE > temp.json && mv temp.json results.json
+            python3 sq-job.py
       - run:
           name: Uploading Results
           command: |
-            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=IAC&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"results.json"'
-      - run:
-          name: Failing Pipeline If Scan Failed
-          command: |
-            if [ "$CHECKOV_EXIT_CODE" -ne 0 ]; then
-              echo "Scan failed. Exiting with failure."
-              exit 1
-            fi
+            for file in `ls -1 SQ-*.json`; do
+              curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=SQ&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form "file=@\"$file\""
+            done
 workflows:
-  accuknox-iac-scan:
+  accuknox-sast-scan:
     jobs:
-      - iac-scan:
+      - sonarqube-scan:
           filters:
             branches:
               only:
-              - iac
+              - sast
+      - accuknox-sast-scan:
+          requires:
+            - sonarqube-scan
+          filters:
+            branches:
+              only:
+              - sast
