@@ -26,6 +26,10 @@ jobs:
             TRIVY_EXIT_CODE=$?
             echo "export TRIVY_EXIT_CODE=$TRIVY_EXIT_CODE" >> $BASH_ENV
       - run:
+          name: Uploading Results
+          command: |
+            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=TR&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"results.json"'
+      - run:
           name: Failing Pipeline If Scan Failed
           command: |
             if [ "$TRIVY_EXIT_CODE" -ne 0 ]; then
