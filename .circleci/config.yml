@@ -20,9 +20,9 @@ jobs:
               -Dsonar.projectKey=$SONAR_PROJECT_KEY \
               -Dsonar.token=$SONAR_TOKEN \
               -Dsonar.sources=.
-  accuknox-sast-scan:
+  accuknox-sast:
     docker:
-      - image: cimg/base:current
+      - image: accuknox/sastjob:latest
     working_directory: /app/data/
     environment:
       REPORT_PATH: /app/data/
@@ -31,7 +31,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: SAST Scan 
+          name: SAST 
           command: |
             python3 sq-job.py
       - run:
@@ -41,16 +41,16 @@ jobs:
               curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=SQ&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form "file=@\"$file\""
             done
 workflows:
-  accuknox-sast-scan:
+  accuknox-sast:
     jobs:
-      - sonarqube-scan:
-          filters:
-            branches:
-              only:
-              - sast
-      - accuknox-sast-scan:
-          requires:
-            - sonarqube-scan
+      # - sonarqube-scan:
+      #     filters:
+      #       branches:
+      #         only:
+      #         - sast
+      - accuknox-sast:
+          # requires:
+          #   - sonarqube-scan
           filters:
             branches:
               only:
