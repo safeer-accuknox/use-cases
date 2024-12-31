@@ -9,6 +9,11 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+          name: Prerequisites
+          command: |
+            apt -qq update -y
+            apt install -y jq curl
+      - run:
           name: IaC Scan 
           command: |
             set +e  # Allow commands to fail without stopping the script
