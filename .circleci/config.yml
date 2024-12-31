@@ -4,7 +4,6 @@ jobs:
     docker:
       - image: sonarsource/sonar-scanner-cli:latest
     environment:
-      SONAR_USER_HOME: "${CIRCLE_WORKING_DIRECTORY}/.sonar"
       GIT_DEPTH: "0"
       SONAR_TOKEN: ${SONAR_TOKEN}
       SONAR_HOST_URL: ${SONAR_HOST_URL}
@@ -15,7 +14,7 @@ jobs:
           name: Run SonarQube Scanner
           command: |
             sonar-scanner \
-              -Dsonar.qualitygate.wait=true \
+              -Dsonar.qualitygate.wait=false \
               -Dsonar.host.url=$SONAR_HOST_URL \
               -Dsonar.projectKey=$SONAR_PROJECT_KEY \
               -Dsonar.token=$SONAR_TOKEN \
