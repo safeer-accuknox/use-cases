@@ -33,7 +33,7 @@ jobs:
       - run:
           name: SAST 
           command: |
-            python3 sq-job.py
+            python3 /app/sq-job.py
       - run:
           name: Uploading Results
           command: |
