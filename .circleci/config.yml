@@ -12,7 +12,7 @@ jobs:
       - run:
           name: DAST Scan 
           command: |
-            zap-baseline.py -t "$TARGET_URL" -J report.json -I"
+            zap-baseline.py -t "$TARGET_URL" -J report.json -I
       - run:
           name: Uploading Results
           command: |
