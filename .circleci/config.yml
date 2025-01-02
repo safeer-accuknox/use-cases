@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   dast-scan:
     docker:
-      - image: cimg/base:current
+      - image: zaproxy/zap-stable:latest
     environment:
       TARGET_URL: "http://testhtml5.vulnweb.com"
     steps:
@@ -12,7 +12,8 @@ jobs:
       - run:
           name: DAST Scan 
           command: |
-            docker run --rm -v $(pwd)/zap:/zap/wrk:rw -u $(id -u ${USER}):$(id -g ${USER}) -t zaproxy/zap-stable:latest zap-baseline.py -t "$TARGET_URL" -J report.json -I
+            mkdir -p /zap/wrk
+            zap-baseline.py -t "$TARGET_URL" -J report.json -I
       - run:
           name: Uploading Results
           command: |
