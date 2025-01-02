@@ -10,12 +10,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Prerequisites
-          command: |
-            apt -qq update -y
-            apt install -y jq
-      - run:
-          name: Scan Docker image
+          name: DAST Scan 
           command: |
             zap-baseline.py -t "$TARGET_URL" -J report.json -I"
       - run:
