@@ -13,7 +13,7 @@ jobs:
           name: DAST Scan 
           command: |
             mkdir -p /zap/wrk
-            zap-baseline.py -t "$TARGET_URL" -J /zap/wrk/report.json -I
+            zap-baseline.py -t "$TARGET_URL" -J report.json -I
       - run:
           name: Uploading Results
           command: |
