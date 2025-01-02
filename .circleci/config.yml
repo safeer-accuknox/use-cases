@@ -13,11 +13,11 @@ jobs:
           name: DAST Scan 
           command: |
             mkdir -p /zap/wrk
-            zap-baseline.py -t "$TARGET_URL" -J report.json -I
+            zap-baseline.py -t "$TARGET_URL" -J /zap/wrk/report.json -I
       - run:
           name: Uploading Results
           command: |
-            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=ZAP&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"report.json"'
+            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=ZAP&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"/zap/wrk/report.json"'
 workflows:
   accuknox-dast-scan:
     jobs:
