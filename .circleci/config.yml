@@ -46,14 +46,14 @@ jobs:
 workflows:
   accuknox-sast:
     jobs:
-      # - sonarqube-scan:
-      #     filters:
-      #       branches:
-      #         only:
-      #         - sast
+      - sonarqube-scan:
+          filters:
+            branches:
+              only:
+              - sast
       - accuknox-sast:
-          # requires:
-          #   - sonarqube-scan
+          requires:
+            - sonarqube-scan
           filters:
             branches:
               only:
