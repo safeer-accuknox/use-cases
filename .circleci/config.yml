@@ -12,7 +12,7 @@ jobs:
       - run:
           name: DAST Scan 
           command: |
-            docker run --rm -v $(pwd)/zap:/zap/wrk:rw -t zaproxy/zap-stable:latest zap-baseline.py -t "$TARGET_URL" -J report.json -I
+            docker run --rm -v $(pwd)/zap:/zap/wrk:rw -u $(id -u ${USER}):$(id -g ${USER}) -t zaproxy/zap-stable:latest zap-baseline.py -t "$TARGET_URL" -J report.json -I
       - run:
           name: Uploading Results
           command: |
