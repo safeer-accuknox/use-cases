@@ -1,60 +1,32 @@
 version: 2.1
 jobs:
-  sonarqube-scan:
+  dast-scan:
     docker:
-      - image: sonarsource/sonar-scanner-cli:latest
+      - image: zaproxy/zap-stable:latest
     environment:
-      GIT_DEPTH: "0"
-    steps:
-      - checkout
-      - run:
-          name: test 
-          command: |
-            printenv
-      - run:
-          name: Run SonarQube Scanner
-          command: |
-            sonar-scanner \
-              -Dsonar.qualitygate.wait=false \
-              -Dsonar.host.url=$SONAR_HOST_URL \
-              -Dsonar.projectKey=$SONAR_PROJECT_KEY \
-              -Dsonar.token=$SONAR_TOKEN \
-              -Dsonar.sources=.
-  accuknox-sast:
-    docker:
-      - image: accuknox/sastjob:latest
-    working_directory: /app/data/
-    environment:
-      REPORT_PATH: /app/data/
+      TARGET_URL: "http://testhtml5.vulnweb.com"
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: SAST 
+          name: Prerequisites
           command: |
-            export SQ_URL=${SONAR_HOST_URL}
-            export SQ_AUTH_TOKEN=${SONAR_TOKEN}
-            export SQ_PROJECTS=${SONAR_PROJECT_KEY}
-            python3 /app/sq-job.py
+            apt -qq update -y
+            apt install -y jq
+      - run:
+          name: Scan Docker image
+          command: |
+            zap-baseline.py -t "$TARGET_URL" -J report.json -I"
       - run:
           name: Uploading Results
           command: |
-            for file in `ls -1 SQ-*.json`; do
-              curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=SQ&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form "file=@\"$file\""
-            done
+            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=ZAP&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"report.json"'
 workflows:
-  accuknox-sast:
+  accuknox-dast-scan:
     jobs:
-      - sonarqube-scan:
+      - dast-scan:
           filters:
             branches:
               only:
-              - sast
-      - accuknox-sast:
-          requires:
-            - sonarqube-scan
-          filters:
-            branches:
-              only:
-              - sast
+              - dast

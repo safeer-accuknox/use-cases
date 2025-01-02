@@ -1,0 +1,23 @@
+Industry-standard SBOM formats
+
+Minimum Elements  https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom
+
+Classes of Software (Open Source, Purchased, In-house)
+
+SBOM Accessibility and Digital Signing
+
+maintaining vendor vulnerability reports.
+
+Automatically verify hashes/signatures for all vendor-supplied software
+installation and updates, where feasible
+
+binary decomposition 
+
+No mention of a formal process for vulnerability reporting.
+
+SOAR
+
+Vendor Severity Comparison
+
+
+Track SBOM Drift
