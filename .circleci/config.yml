@@ -6,3 +6,7 @@ workflows:
     jobs:
       - accuknox-scan/container:
           ACCUKNOX_TOKEN: ${ACCUKNOX_ENDPOINT}
+          ACCUKNOX_TENANT: ${ACCUKNOX_TENANT}
+          ACCUKNOX_ENDPOINT: ${ACCUKNOX_ENDPOINT}
+          ACCUKNOX_LABEL: ${ACCUKNOX_LABEL}
+          IMAGE_NAME: circleciplugin
