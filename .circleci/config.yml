@@ -1,12 +1,8 @@
 version: 2.1
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.15
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.16
 workflows:
   accuknox:
     jobs:
       - accuknox-scan/container:
-          ACCUKNOX_TOKEN: $ACCUKNOX_TOKEN
-          ACCUKNOX_TENANT: $ACCUKNOX_TENANT
-          ACCUKNOX_ENDPOINT: $ACCUKNOX_ENDPOINT
-          ACCUKNOX_LABEL: $ACCUKNOX_LABEL
           IMAGE_NAME: circleciplugin
