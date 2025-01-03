@@ -1,17 +1,18 @@
 version: 2.1
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.2
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.3
 jobs:
   test:
     docker:
       - image: 'circleci/python:3.7.4'
     steps:
     - checkout
-    - accuknox-scan/container-scan: 
+    - accuknox-scan/container-scan:
         ACCUKNOX_TOKEN: ${ACCUKNOX_ENDPOINT}
         ACCUKNOX_TENANT: ${ACCUKNOX_TENANT}
         ACCUKNOX_ENDPOINT: ${ACCUKNOX_ENDPOINT}
         ACCUKNOX_LABEL: ${ACCUKNOX_LABEL}
+        IMAGE_NAME: circleciplugin
 workflows:
   test:
     jobs:
