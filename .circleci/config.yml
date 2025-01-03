@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@0.0.1
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.2
 jobs:
   test:
     docker:
