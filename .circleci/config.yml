@@ -5,7 +5,7 @@ workflows:
   accuknox:
     jobs:
       - accuknox-scan/iac:
-          INPUT_DIRECTORY: "./"
+          INPUT_DIRECTORY: "."
           INPUT_COMPACT: true
           INPUT_QUIET: true
           INPUT_SOFT_FAIL: true
