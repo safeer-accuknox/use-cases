@@ -1,6 +1,0 @@
-projectKey=spoc_test1
-serverUrl=https://sq.accuknox.com
-serverVersion=24.12.0.100206
-dashboardUrl=https://sq.accuknox.com/dashboard?id=spoc_test1
-ceTaskId=cb483de5-07ae-4d0b-993e-6ba9f5ca4b00
-ceTaskUrl=https://sq.accuknox.com/api/ce/task?id=cb483de5-07ae-4d0b-993e-6ba9f5ca4b00
