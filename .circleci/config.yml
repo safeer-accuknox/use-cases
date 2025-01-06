@@ -5,4 +5,4 @@ workflows:
   accuknox:
     jobs:
       - accuknox-scan/sast:
-          INPUT_SOFT_FAIL: true
+          INPUT_SOFT_FAIL: false
