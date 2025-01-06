@@ -1,49 +1,11 @@
 version: 2.1
-jobs:
-  iac-scan:
-    working_directory: ./
-    docker:
-      - image: ghcr.io/bridgecrewio/checkov:3.2.21
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Prerequisites
-          command: |
-            apt -qq update -y
-            apt install -y jq curl
-      - run:
-          name: IaC Scan 
-          command: |
-            set +e  # Allow commands to fail without stopping the script
-            checkov --compact  --quiet -o json --output-file-path ./results  -d .
-            CHECKOV_EXIT_CODE=$?
-            echo "export CHECKOV_EXIT_CODE=$CHECKOV_EXIT_CODE" >> $BASH_ENV
-      - run:
-          name: Processing results 
-          command: |
-            RESULT_FILE="results/results_json.json"
-            if jq -e 'type == "object"' $RESULT_FILE > /dev/null 2>&1; then
-              jq '[.]' $RESULT_FILE > temp.json && mv temp.json $RESULT_FILE
-            fi
-            jq --arg repoLink "${CIRCLE_REPOSITORY_URL}" --arg branch "${CIRCLE_BRANCH}" '. += [{"details": {"repo": $repoLink, "branch": $branch}}]' $RESULT_FILE > temp.json && mv temp.json results.json
-      - run:
-          name: Uploading Results
-          command: |
-            curl --location --request POST "https://${ACCUKNOX_ENDPOINT}/api/v1/artifact/?tenant_id=${ACCUKNOX_TENANT}&data_type=IAC&label_id=${ACCUKNOX_LABEL}&save_to_s3=false" --header "Tenant-Id: ${ACCUKNOX_TENANT}" --header "Authorization: Bearer ${ACCUKNOX_TOKEN}" --form 'file=@"results.json"'
-      - run:
-          name: Failing Pipeline If Scan Failed
-          command: |
-            if [ "$CHECKOV_EXIT_CODE" -ne 0 ]; then
-              echo "Scan failed. Exiting with failure."
-              exit 1
-            fi
+orbs:
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.26
 workflows:
-  accuknox-iac-scan:
+  accuknox:
     jobs:
-      - iac-scan:
-          filters:
-            branches:
-              only:
-              - iac
+      - accuknox-scan/iac:
+          INPUT_DIRECTORY: "./"
+          INPUT_COMPACT: true
+          INPUT_QUIET: true
+          INPUT_SOFT_FAIL: true
