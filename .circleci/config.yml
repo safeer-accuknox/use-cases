@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.43
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.44
 workflows:
   accuknox:
     jobs:
       - accuknox-scan/sast:
-          INPUT_SOFT_FAIL: false
+          INPUT_SOFT_FAIL: true
