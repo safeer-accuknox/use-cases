@@ -5,3 +5,4 @@ JWT_SECRET=eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp
 MONGODB_URL=mongodb+srv://my-user:my-password@clustername.mongodb.net/
 TOKEN=abc12345abc12345abc12345abc12345abc12345abc
 KEY=123123123123
+PSQL_URL=postgresql://user:secret@localhost
