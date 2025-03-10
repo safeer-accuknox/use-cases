@@ -17,9 +17,9 @@ jobs:
         with:
           directory: ./
           output_file_path: ./results
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.ACCUKNOX_TOKEN }}
           endpoint: "cspm.demo.accuknox.com"
-          tenant_id: ${{ secrets.TENANT_ID}}
+          tenant_id: 3730
           quiet: "true"
-          label: "s"
+          label: "SPOC"
           exit_code: 1
