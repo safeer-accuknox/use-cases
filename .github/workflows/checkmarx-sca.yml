@@ -147,9 +147,11 @@ jobs:
           path: tmp_sarif_with_snippets.sarif
 
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: tmp_sarif_with_snippets.sarif
+          name: scan-results-${{ github.sha }}
+          path: tmp_sarif_with_snippets.sarif
+          if-no-files-found: ignore
 
       - name: Push SARIF file to AccuKnox
         run: |
