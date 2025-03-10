@@ -140,12 +140,6 @@ jobs:
           process_sarif_file("cx_result.sarif")
           EOF
 
-      - name: Upload SARIF file with code snippets
-        uses: actions/upload-artifact@v3
-        with:
-          name: sarif-results-with-snippets
-          path: tmp_sarif_with_snippets.sarif
-
       - name: Upload SARIF file
         uses: actions/upload-artifact@v4
         with:
