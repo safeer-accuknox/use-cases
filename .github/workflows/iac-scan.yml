@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@main
 
-      - name: Run IaC scan
+      - name: Accuknox IaC
         uses: accuknox/iac-scan-action@v0.0.1
         with:
           directory: ./
@@ -23,3 +23,6 @@ jobs:
           quiet: "true"
           label: "SPOC"
           exit_code: 1
+
+      - name: Display SAST Results
+        run: cat results.json
