@@ -22,7 +22,7 @@ jobs:
           tenant_id: 3730
           quiet: "true"
           label: "SPOC"
-          exit_code: 0
+          soft_fail: true
 
       - name: Display SAST Results
         run: cat results.json
