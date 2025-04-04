@@ -1,0 +1,30 @@
+name: Opengrep Test
+
+on:
+  push:
+    branches:
+      - sast
+  pull_request:
+    branches:
+      - sast
+
+jobs:
+  accuknox-cicd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run AccuKnox SAST
+        uses: accuknox/sast-scan-action@sq-findings-enrichment
+        with:
+          sonar_token: ${{ secrets.SONAR_CLOUD_TOKEN }}
+          sonar_host_url: "https://sonarcloud.io"
+          sonar_project_key: "azure-plugin-test"
+          sonar_organization_id: "r3d-shadow"
+          accuknox_endpoint: "cspm.dev.accuknox.com"
+          tenant_id: 19
+          accuknox_token: ${{ secrets.ACCUKNOX_DEV_TOKEN }}
+          label: "SPOC"
+          input_soft_fail: false
+          skip_sonar_scan: false
