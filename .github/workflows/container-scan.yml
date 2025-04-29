@@ -22,5 +22,5 @@ jobs:
           image: ${{ github.repository }}
           tag: ${{ github.run_id }}
           exit_code: 1
-          dockerfile_context: Dockerfile
-          severity: CRITICAL
+          # dockerfile_context: Dockerfile
+          # severity: CRITICAL
