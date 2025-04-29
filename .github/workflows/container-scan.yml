@@ -18,6 +18,8 @@ jobs:
           token: ${{ secrets.ACCUKNOX_TOKEN }}
           tenant_id: 3730
           endpoint: "cspm.demo.accuknox.com"
-          repository_name: ${{ github.repository }}
+          label: "SPOC"
+          image: ${{ github.repository }}
+          tag: ${{ github.run_id }}
           exit_code: 1
           dockerfile_context: Dockerfile
