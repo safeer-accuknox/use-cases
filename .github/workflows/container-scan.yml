@@ -1,12 +1,9 @@
-name: AccuKnox Scan Workflow
+name: AccuKnox Container Scan
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - container
 
 jobs:
   accuknox-cicd:
@@ -15,11 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@main
 
-      - name: Run AccuKnox container scan
-        uses: accuknox/container-scan-action@v0.0.1
+      - name: AccuKnox Container Scan
+        uses: accuknox/container-scan-action@v1.0.0
         with:
-          token: ${{ secrets.TOKEN }}
-          tenant_id: ${{ secrets.TENANT_ID }}
+          token: ${{ secrets.ACCUKNOX_TOKEN }}
+          tenant_id: 3730
           endpoint: "cspm.demo.accuknox.com"
           repository_name: ${{ github.repository }}
           exit_code: 1
