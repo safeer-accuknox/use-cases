@@ -25,7 +25,7 @@ jobs:
 
       - name: Run ASPM CLI scan
         env:
-          ACCUKNOX_TENANT: 167
+          ACCUKNOX_TENANT: 3730
           ACCUKNOX_LABEL: SPOC
           ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
           ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
