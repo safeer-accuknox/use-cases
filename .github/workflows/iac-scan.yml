@@ -3,23 +3,30 @@ name: AccuKnox IaC Scan Workflow
 on:
   push:
     branches:
-      - iac
+      - iac-with-cli
 
 jobs:
-  tests:
+  clone-and-install:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@main
 
-      - name: Accuknox IaC
-        uses: accuknox/iac-scan-action@v0.0.1
-        with:
-          directory: ./
-          output_file_path: ./results
-          token: ${{ secrets.ACCUKNOX_TOKEN }}
-          endpoint: "cspm.demo.accuknox.com"
-          tenant_id: 3730
-          quiet: "true"
-          label: "SPOC"
-          soft_fail: true
+    steps:
+      - name: Checkout this repo (optional)
+        uses: actions/checkout@v3
+
+      - name: Clone ASPM CLI repo to /tmp
+        run: |
+          git clone https://github.com/safeer-accuknox/accuknox-aspm-cli /tmp/accuknox-aspm-cli
+          pip install /tmp/accuknox-aspm-cli
+
+      - name: Install ASPM CLI with pip
+        run: |
+          pip install /tmp/accuknox-aspm-cli
+
+      - name: Run ASPM CLI scan
+        env:
+          ACCUKNOX_TENANT: 167
+          ACCUKNOX_LABEL: SPOC
+          ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
+          ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
+        run: |
+            aspm-cli scan iac --repo-url "${{ github.server_url }}/${{ github.repository }}" --repo-branch "${{ github.ref_name }}" --quiet --compact
