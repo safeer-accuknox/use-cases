@@ -15,6 +15,7 @@ jobs:
 
       - name: Clone ASPM CLI repo to /tmp
         run: |
+          # FOR TESTING ONLY, this should be released to Python packages artifact.
           git clone https://github.com/safeer-accuknox/accuknox-aspm-cli /tmp/accuknox-aspm-cli
           pip install /tmp/accuknox-aspm-cli
 
