@@ -13,14 +13,10 @@ jobs:
       - name: Checkout this repo (optional)
         uses: actions/checkout@v3
 
-      - name: Clone ASPM CLI repo to /tmp
-        run: |
-          # Recommended to releas on PyPI
-          pip install https://github.com/safeer-accuknox/accuknox-aspm-cli/releases/download/v0.1.1/accuknox_aspm_scanner-0.1.0-py3-none-any.whl
-
       - name: Install ASPM CLI with pip
         run: |
-          pip install /tmp/accuknox-aspm-cli
+          # Recommended to releas on PyPI
+          pip install https://github.com/safeer-accuknox/accuknox-aspm-scanner/releases/download/v0.1.2/accuknox_aspm_scanner-0.1.0-py3-none-any.whl
 
       - name: Run ASPM CLI scan
         env:
@@ -29,4 +25,4 @@ jobs:
           ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
           ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
         run: |
-            aspm-cli scan iac --repo-url "${{ github.server_url }}/${{ github.repository }}" --repo-branch "${{ github.ref_name }}" --quiet --compact
+            accuknox-aspm-scanner scan iac --repo-url "${{ github.server_url }}/${{ github.repository }}" --repo-branch "${{ github.ref_name }}" --quiet --compact
