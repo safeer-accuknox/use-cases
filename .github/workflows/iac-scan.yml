@@ -16,7 +16,7 @@ jobs:
       - name: Install ASPM CLI with pip
         run: |
           # Recommended to releas on PyPI
-          pip install https://github.com/safeer-accuknox/accuknox-aspm-scanner/releases/download/v0.1.4/accuknox_aspm_scanner-0.1.0-py3-none-any.whl
+          pip install https://github.com/safeer-accuknox/accuknox-aspm-scanner/releases/download/v0.1.5/accuknox_aspm_scanner-0.1.0-py3-none-any.whl
 
       - name: Run ASPM CLI scan
         env:
