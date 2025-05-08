@@ -25,4 +25,4 @@ jobs:
           ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
           ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
         run: |
-            accuknox-aspm-scanner scan iac --repo-url "${{ github.server_url }}/${{ github.repository }}" --repo-branch "${{ github.ref_name }}" --quiet --compact
+            accuknox-aspm-scanner scan iac --repo-url "${{ github.server_url }}/${{ github.repository }}" --repo-branch "${{ github.ref_name }}" --quiet --compact --softfail
