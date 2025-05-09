@@ -25,4 +25,4 @@ jobs:
           ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
           ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
         run: |
-            accuknox-aspm-scanner --softfail scan iac --quiet --compact
+            accuknox-aspm-scanner scan iac --quiet --compact
