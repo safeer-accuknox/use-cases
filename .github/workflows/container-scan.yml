@@ -12,6 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@main
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Pull and tag Node image
+        run: |
+          docker pull node:slim
+          docker tag node:slim my-node-scan:latest
+
       - name: AccuKnox Container Scan
         uses: accuknox/container-scan-action@8c254eb7aa789ed8fd3c123c379b12fe17c2a49c
         with:
@@ -19,6 +27,6 @@ jobs:
           tenant_id: 3730
           endpoint: "cspm.demo.accuknox.com"
           label: "SPOC"
-          image: node
-          tag: slim
+          image: my-node-scan
+          tag: latest
           severity: "CRITICAL"
