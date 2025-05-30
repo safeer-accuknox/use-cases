@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: AccuKnox Container Scan
-        uses: accuknox/container-scan-action@v1.0.0
+        uses: accuknox/container-scan-action@8c254eb7aa789ed8fd3c123c379b12fe17c2a49c
         with:
           token: ${{ secrets.ACCUKNOX_TOKEN }}
           tenant_id: 3730
