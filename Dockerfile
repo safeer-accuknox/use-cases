@@ -1,7 +1,3 @@
-FROM node:15-slim
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["node", "server.js"]
+FROM accuknox/opengrepjob:1.0.2
+COPY . /app1
+WORKDIR /app1
