@@ -22,21 +22,38 @@ jobs:
             TAG=${TAG:-$CIRCLE_SHA1}
             docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
             echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
+      - run:
+          name: Save Docker Image as tarball
+          command: docker save $IMAGE_NAME:$TAG -o image.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - image.tar
+
+  container-scan:
+    docker:
+      - image: cimg/base:stable
+    environment:
+      IMAGE_NAME: circleci
+      TAG: test
+      SOFT_FAIL: true
+    steps:
+      - attach_workspace:
+          at: .
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Load Docker Image from tarball
+          command: docker load -i image.tar
+      - accuknox-scan/container:
+          IMAGE_NAME: circleci
+          TAG: test
+          SOFT_FAIL: true
 
 workflows:
   accuknox:
     jobs:
-      # - accuknox-scan/sast:
-          # SOFT_FAIL: true
-      # - accuknox-scan/iac:
-      #     SOFT_FAIL: true
-      #     FRAMEWORK: "terraform"
-      # - accuknox-scan/secret:
-      #     SOFT_FAIL: true
       - build-docker-image
-      - accuknox-scan/container:
+      - container-scan:
           requires:
             - build-docker-image
-          IMAGE_NAME: circleci
-          TAG: test
-          SOFT_FAIL: true
