@@ -1,10 +1,34 @@
 version: 2.1
 
-orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.106
+jobs:
+  say-hello:
+    docker:
+      - image: accuknox/aspmscanner:v0.8.3
+    steps:
+      - checkout
+
+      - run:
+          name: Print Hello World
+          command: echo "Hello, World!"
+
+      - run:
+          name: Show Last Commit ID and Message
+          command: |
+            echo "Last Commit ID:"
+            git log -1 --pretty=format:'%H'
+            echo ""
+            echo "Last Commit Message:"
+            git log -1 --pretty=format:'%s'
+
+      - run:
+          name: Show Directory Path
+          command: pwd
+
+      - run:
+          name: List Files
+          command: ls -la
 
 workflows:
-  accuknox:
+  hello-workflow:
     jobs:
-      - accuknox-scan/sast:
-          SOFT_FAIL: true
+      - say-hello
