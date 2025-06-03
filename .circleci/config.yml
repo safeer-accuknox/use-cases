@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.121
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.122
 
 workflows:
   accuknox:
@@ -16,6 +16,9 @@ workflows:
       #     FRAMEWORK: "terraform"
       # - accuknox-scan/secret:
       #     SOFT_FAIL: true
+      - accuknox-scan/dast:
+          SOFT_FAIL: true
+          TARGET_URL: "http://testphp.vulnweb.com"
 
 # jobs:
 #   build-docker-image:
