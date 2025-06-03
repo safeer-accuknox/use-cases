@@ -1,11 +1,13 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.114
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.113
 
 workflows:
   accuknox:
     jobs:
+      # - accuknox-scan/sast:
+          # SOFT_FAIL: true
       - accuknox-scan/iac:
           SOFT_FAIL: true
           FRAMEWORK: "terraform"
