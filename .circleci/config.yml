@@ -6,3 +6,8 @@ workflows:
     jobs:
       - accuknox-scan/sast:
           SOFT_FAIL: true
+        environment:
+          DEBUG: "TRUE"
+          ACCUKNOX_TENANT: 3730
+          ACCUKNOX_LABEL: "SPOC"
+          ACCUKNOX_ENDPOINT: "cspm.demo.accuknox.com"
