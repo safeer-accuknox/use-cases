@@ -1,13 +1,15 @@
 version: 2.1
+
 orbs:
   accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.105
+
 workflows:
   accuknox:
     jobs:
       - accuknox-scan/sast:
           SOFT_FAIL: true
-        environment:
-          DEBUG: "TRUE"
-          ACCUKNOX_TENANT: 3730
-          ACCUKNOX_LABEL: "SPOC"
-          ACCUKNOX_ENDPOINT: "cspm.demo.accuknox.com"
+          environment:
+            DEBUG: "TRUE"
+            ACCUKNOX_TENANT: "3730"
+            ACCUKNOX_LABEL: "SPOC"
+            ACCUKNOX_ENDPOINT: "cspm.demo.accuknox.com"
