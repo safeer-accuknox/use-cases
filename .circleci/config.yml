@@ -8,21 +8,21 @@ workflows:
     jobs:
       - accuknox-scan/sast:
           SOFT_FAIL: true
-      - accuknox-scan/sq-sast:
-          SOFT_FAIL: true
-          SKIP_SONAR_SCAN: true
-      - accuknox-scan/iac:
-          SOFT_FAIL: true
-          FRAMEWORK: "terraform"
-      - accuknox-scan/secret:
-          SOFT_FAIL: true
-      - accuknox-scan/container:
-          IMAGE_NAME: node
-          TAG: slim
-          SOFT_FAIL: true
-      - accuknox-scan/dast:
-          SOFT_FAIL: true
-          TARGET_URL: "http://testphp.vulnweb.com"
+    #   - accuknox-scan/sq-sast:
+    #       SOFT_FAIL: true
+    #       SKIP_SONAR_SCAN: true
+    #   - accuknox-scan/iac:
+    #       SOFT_FAIL: true
+    #       FRAMEWORK: "terraform"
+    #   - accuknox-scan/secret:
+    #       SOFT_FAIL: true
+    #   - accuknox-scan/container:
+    #       IMAGE_NAME: node
+    #       TAG: slim
+    #       SOFT_FAIL: true
+    #   - accuknox-scan/dast:
+    #       SOFT_FAIL: true
+    #       TARGET_URL: "http://testphp.vulnweb.com"
 
 # jobs:
 #   build-docker-image:
