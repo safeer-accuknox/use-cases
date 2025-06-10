@@ -33,6 +33,13 @@ jobs:
       #     upload_artifact: false
 
 
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME="github-action-test"
+          IMAGE_TAG="latest"
+          docker build -t "$IMAGE_NAME:$IMAGE_TAG" .
+          echo "Successfully built Docker image: $IMAGE_NAME:$IMAGE_TAG"
+
       - name: "Run Accuknox Container"
         uses: accuknox/container-scan-action@1.0.0
         with:
@@ -40,5 +47,5 @@ jobs:
           tenant_id: 3730
           token: ${{ secrets.ACCUKNOX_TOKEN }}
           label: "SPOC"
-          image: "node"
-          tag: "slim"
+          image: "github-action-test"
+          tag: "latest"
