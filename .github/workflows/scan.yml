@@ -12,40 +12,40 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@main
 
-      # - name: AccuKnox Secret Scan
-      #   uses: accuknox/secret-scan-action@v1.0.1
-      #   with:
-      #     token: ${{ secrets.ACCUKNOX_TOKEN }}
-      #     tenant_id: 3730
-      #     label: "SPOC"
-      #     endpoint:  "cspm.demo.accuknox.com"
-      #     fail: false
-      #     use_extended_ruleset: true
-
-      # - name: "Run Accuknox SAST: Opengrep"
-      #   uses: accuknox/sast-scan-opengrep-action@1.0.0
-      #   with:
-      #     accuknox_endpoint: "cspm.demo.accuknox.com"
-      #     accuknox_tenant: 3730
-      #     accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-      #     accuknox_label: "SPOC"
-      #     input_soft_fail: "true"
-      #     upload_artifact: false
-
-
-      - name: Build Docker image
-        run: |
-          IMAGE_NAME="github-action-test"
-          IMAGE_TAG="latest"
-          docker build -t "$IMAGE_NAME:$IMAGE_TAG" .
-          echo "Successfully built Docker image: $IMAGE_NAME:$IMAGE_TAG"
-
-      - name: "Run Accuknox Container"
-        uses: accuknox/container-scan-action@1.0.0
+      - name: AccuKnox Secret Scan
+        uses: accuknox/secret-scan-action@v1.0.1
         with:
-          endpoint: "cspm.demo.accuknox.com"
-          tenant_id: 3730
           token: ${{ secrets.ACCUKNOX_TOKEN }}
+          tenant_id: 3730
           label: "SPOC"
-          image: "github-action-test"
-          tag: "latest"
+          endpoint:  "cspm.demo.accuknox.com"
+          fail: false
+          use_extended_ruleset: true
+
+      - name: "Run Accuknox SAST: Opengrep"
+        uses: accuknox/sast-scan-opengrep-action@1.0.0
+        with:
+          accuknox_endpoint: "cspm.demo.accuknox.com"
+          accuknox_tenant: 3730
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+          accuknox_label: "SPOC"
+          input_soft_fail: true
+          upload_artifact: true
+
+
+      # - name: Build Docker image
+      #   run: |
+      #     IMAGE_NAME="github-action-test"
+      #     IMAGE_TAG="latest"
+      #     docker build -t "$IMAGE_NAME:$IMAGE_TAG" .
+      #     echo "Successfully built Docker image: $IMAGE_NAME:$IMAGE_TAG"
+
+      # - name: "Run Accuknox Container"
+      #   uses: accuknox/container-scan-action@1.0.0
+      #   with:
+      #     endpoint: "cspm.demo.accuknox.com"
+      #     tenant_id: 3730
+      #     token: ${{ secrets.ACCUKNOX_TOKEN }}
+      #     label: "SPOC"
+      #     image: "github-action-test"
+      #     tag: "latest"
