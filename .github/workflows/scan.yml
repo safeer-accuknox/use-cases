@@ -15,10 +15,10 @@ jobs:
       - name: AccuKnox Secret Scan
         uses: accuknox/secret-scan-action@v1.0.1
         with:
-          token: ${{ secrets.ACCUKNOX_TOKEN }}
-          tenant_id: 3730
+          token: ${{ secrets.ACCUKNOX_STAGE_TOKEN }}
+          tenant_id: 4
           label: "SPOC"
-          endpoint:  "cspm.demo.accuknox.com"
+          endpoint:  "cspm.stage.accuknox.com"
           fail: false
           use_extended_ruleset: true
 
