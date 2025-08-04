@@ -29,4 +29,5 @@ jobs:
           ACCUKNOX_LABEL: "SPOC"
           ACCUKNOX_ENDPOINT: cspm.stage.accuknox.com
         run: |
+          cat policy.yaml
           accuknox-aspm-scanner scan container --command "image nginx:latest --severity CRITICAL"
