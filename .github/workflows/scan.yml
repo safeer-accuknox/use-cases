@@ -23,5 +23,10 @@ jobs:
           pip install --break-system-packages https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.8.15/accuknox_aspm_scanner-0.8.13-py3-none-any.whl
 
       - name: Run Container Scan
+        env:
+          ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
+          ACCUKNOX_TENANT: "3730"
+          ACCUKNOX_LABEL: "SPOC"
+          ACCUKNOX_ENDPOINT: cspm.stage.accuknox.com
         run: |
           accuknox-aspm-scanner scan container --command "image nginx:latest --severity CRITICAL"
