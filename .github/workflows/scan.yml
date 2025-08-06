@@ -13,21 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+
+      - name: "Run Accuknox SAST"
+        uses:  r3d-shadow/sast-scan-action@0.0.2
         with:
-          python-version: "3.11"
-
-      - name: Install ASPM Scanner CLI
-        run: |
-          pip install --break-system-packages https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.8.15/accuknox_aspm_scanner-0.8.13-py3-none-any.whl
-
-      - name: Run Container Scan
-        env:
-          ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
-          ACCUKNOX_TENANT: "3730"
-          ACCUKNOX_LABEL: "SPOC"
-          ACCUKNOX_ENDPOINT: cspm.demo.accuknox.com
-        run: |
-          cat policy.yaml
-          accuknox-aspm-scanner scan container --command "image nginx:latest --severity CRITICAL"
+          sonar_token: ${{ secrets.SONAR_TOKEN }}
+          sonar_host_url: "https://sonarcloud.io"
+          sonar_project_key: "r3d-shadow_azure-plugin-test"
+          sonar_organization_id: "r3d-shadow"
+          accuknox_endpoint: "cspm.demo.accuknox.com"
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+          tenant_id: 3730
+          label: "SPOC"
+          input_soft_fail: false
+          skip_sonar_scan: false
