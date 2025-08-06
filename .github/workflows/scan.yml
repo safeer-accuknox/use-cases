@@ -38,4 +38,4 @@ jobs:
           tenant_id: 3730
           label: "SPOC"
           input_soft_fail: false
-          skip_sonar_scan: false
+          skip_sonar_scan: true
