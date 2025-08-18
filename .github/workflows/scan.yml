@@ -16,12 +16,12 @@ jobs:
       - name: "Run Accuknox SAST"
         uses:  r3d-shadow/sast-scan-action@main
         with:
-          sonar_token: ${{ secrets.SONAR_CLOUD_TOKEN }}
+          sonar_token: ${{ secrets.SONAR_CLOUD_TOKEN1 }}
           sonar_host_url: "https://sonarcloud.io"
           sonar_project_key: "r3d-shadow_azure-plugin-test"
           sonar_organization_id: "r3d-shadow"
           accuknox_endpoint: "cspm.demo.accuknox.com"
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN1 }}
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
           tenant_id: 3730
           label: "SPOC"
           input_soft_fail: true
