@@ -31,7 +31,7 @@ jobs:
       #       label: "SPOC"
       #       endpoint:  "cspm.demo.accuknox.com"
       #       fail: false
-            use_extended_ruleset: true
+      #       use_extended_ruleset: true
 
         - name: "Run Accuknox SAST"
           uses:  r3d-shadow/sast-scan-action@main
