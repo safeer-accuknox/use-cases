@@ -21,7 +21,7 @@ jobs:
           sonar_project_key: "r3d-shadow_azure-plugin-test"
           sonar_organization_id: "r3d-shadow"
           accuknox_endpoint: "cspm.demo.accuknox.com"
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN1 }}
           tenant_id: 3730
           label: "SPOC"
           input_soft_fail: true
