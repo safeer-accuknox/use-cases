@@ -1,0 +1,52 @@
+version: 2.1
+
+orbs:
+  accuknox-scan: accuknox/scan@1.0.0
+
+
+jobs:
+  build-docker-image:
+    docker:
+      - image: cimg/base:stable
+    environment:
+      IMAGE_NAME: circleci
+      TAG: test
+      DOCKERFILE: Dockerfile
+      BUILD_CONTEXT: .
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: |
+            TAG=${TAG:-$CIRCLE_SHA1}
+            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
+            echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
+
+workflows:  
+  accuknox:
+    jobs:
+      - accuknox-scan/sast:
+          SOFT_FAIL: true
+      - accuknox-scan/sq-sast:
+          SOFT_FAIL: true
+          SKIP_SONAR_SCAN: true
+      - accuknox-scan/iac:
+          SOFT_FAIL: true
+          FRAMEWORK: "terraform"
+      - accuknox-scan/secret:
+          SOFT_FAIL: true
+      - accuknox-scan/container:
+          IMAGE_NAME: node
+          TAG: slim
+          SOFT_FAIL: true
+      - accuknox-scan/dast:
+          SOFT_FAIL: true
+          TARGET_URL: "http://testphp.vulnweb.com"
+      - build-docker-image
+      - accuknox-scan/container:
+          requires:
+            - build-docker-image
+          IMAGE_NAME: circleci
+          TAG: test
+          SOFT_FAIL: true
+          SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
