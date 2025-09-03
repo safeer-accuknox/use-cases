@@ -35,10 +35,11 @@ jobs:
       BUILD_CONTEXT: .
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Build Docker Image
           command: |
-            printenv
+            # printenv
             TAG=${TAG:-$CIRCLE_SHA1}
             docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
             echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
