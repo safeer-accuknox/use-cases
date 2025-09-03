@@ -46,11 +46,11 @@ jobs:
 workflows:
   accuknox:
     jobs:
-      - build-docker-image
-          - accuknox-scan/container:
-          requires:
-            - build-docker-image
-          IMAGE_NAME: circleci
-          TAG: test
-          SOFT_FAIL: true
-          SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
+    - build-docker-image
+    - accuknox-scan/container:
+        requires:
+        - build-docker-image
+        IMAGE_NAME: circleci
+        TAG: test
+        SOFT_FAIL: true
+        SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
