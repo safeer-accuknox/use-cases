@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.1
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.2
 
 # workflows:  
 #   accuknox:
@@ -36,6 +36,11 @@ jobs:
           command: |
             # printenv
             docker build -t circleci:test -f Dockerfile .
+            docker save circleci:test -o image.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+          - image.tar
 
 workflows:
   accuknox:
@@ -45,6 +50,7 @@ workflows:
         requires:
         - build-docker-image
         IMAGE_NAME: circleci
+        IMAGE_TAR: image.tar
         TAG: test
         SOFT_FAIL: true
         SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
