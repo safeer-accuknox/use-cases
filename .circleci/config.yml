@@ -3,27 +3,6 @@ version: 2.1
 orbs:
   accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.3
 
-# workflows:  
-#   accuknox:
-#     jobs:
-#       - accuknox-scan/sast:
-#           SOFT_FAIL: true
-    #   - accuknox-scan/sq-sast:
-    #       SOFT_FAIL: true
-    #       SKIP_SONAR_SCAN: false
-    #   - accuknox-scan/iac:
-    #       SOFT_FAIL: true
-    #   - accuknox-scan/secret:
-    #       SOFT_FAIL: true
-    #   - accuknox-scan/container:
-    #       IMAGE_NAME: node
-    #       TAG: slim
-    #       SOFT_FAIL: true
-    #       SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
-    #   - accuknox-scan/dast:
-    #       SOFT_FAIL: true
-    #       TARGET_URL: "http://testphp.vulnweb.com"
-
 jobs:
   build-docker-image:
     docker:
@@ -42,9 +21,21 @@ jobs:
           paths:
           - image.tar
 
-workflows:
+workflows:  
   accuknox:
     jobs:
+    - accuknox-scan/sast:
+        SOFT_FAIL: true
+    - accuknox-scan/sq-sast:
+        SOFT_FAIL: true
+        SKIP_SONAR_SCAN: false
+    - accuknox-scan/iac:
+        SOFT_FAIL: true
+    - accuknox-scan/secret:
+        SOFT_FAIL: true
+    - accuknox-scan/dast:
+        SOFT_FAIL: true
+        TARGET_URL: "http://testphp.vulnweb.com"
     - build-docker-image
     - accuknox-scan/container:
         requires:
