@@ -39,9 +39,9 @@ jobs:
           name: Build Docker Image
           command: |
             printenv
-            # TAG=${TAG:-$CIRCLE_SHA1}
-            # docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
-            # echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
+            TAG=${TAG:-$CIRCLE_SHA1}
+            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
+            echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
 
 workflows:
   accuknox:
