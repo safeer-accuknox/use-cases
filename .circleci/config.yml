@@ -1,53 +1,53 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox/scan@1.0.0
+  accuknox-scan: accuknox-scan/accuknox-test-scan@dev:1.0
 
-# workflows:  
-#   accuknox:
-#     jobs:
-#       - accuknox-scan/sast:
-#           SOFT_FAIL: true
-#       - accuknox-scan/sq-sast:
-#           SOFT_FAIL: true
-#           SKIP_SONAR_SCAN: false
-#       - accuknox-scan/iac:
-#           SOFT_FAIL: true
-#       - accuknox-scan/secret:
-#           SOFT_FAIL: true
-#       - accuknox-scan/container:
-#           IMAGE_NAME: node
-#           TAG: slim
-#           SOFT_FAIL: true
-#           SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
-#       - accuknox-scan/dast:
-#           SOFT_FAIL: true
-#           TARGET_URL: "http://testphp.vulnweb.com"
-
-jobs:
-  build-docker-image:
-    docker:
-      - image: cimg/base:stable
-    environment:
-      IMAGE_NAME: circleci
-      TAG: test
-      DOCKERFILE: Dockerfile
-      BUILD_CONTEXT: .
-    steps:
-      - checkout
-      - run:
-          name: Build Docker Image
-          command: |
-            printenv
-            # TAG=${TAG:-$CIRCLE_SHA1}
-            # docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
-            # echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
-
-workflows:
+workflows:  
   accuknox:
     jobs:
-      - build-docker-image
-        #   - accuknox-scan/container:
+      - accuknox-scan/sast:
+          SOFT_FAIL: true
+    #   - accuknox-scan/sq-sast:
+    #       SOFT_FAIL: true
+    #       SKIP_SONAR_SCAN: false
+    #   - accuknox-scan/iac:
+    #       SOFT_FAIL: true
+    #   - accuknox-scan/secret:
+    #       SOFT_FAIL: true
+    #   - accuknox-scan/container:
+    #       IMAGE_NAME: node
+    #       TAG: slim
+    #       SOFT_FAIL: true
+    #       SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
+    #   - accuknox-scan/dast:
+    #       SOFT_FAIL: true
+    #       TARGET_URL: "http://testphp.vulnweb.com"
+
+# jobs:
+#   build-docker-image:
+#     docker:
+#       - image: cimg/base:stable
+#     environment:
+#       IMAGE_NAME: circleci
+#       TAG: test
+#       DOCKERFILE: Dockerfile
+#       BUILD_CONTEXT: .
+#     steps:
+#       - checkout
+#       - run:
+#           name: Build Docker Image
+#           command: |
+#             printenv
+#             # TAG=${TAG:-$CIRCLE_SHA1}
+#             # docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
+#             # echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
+
+# workflows:
+#   accuknox:
+#     jobs:
+#       - build-docker-image
+#         #   - accuknox-scan/container:
         #   requires:
         #     - build-docker-image
         #   IMAGE_NAME: circleci
