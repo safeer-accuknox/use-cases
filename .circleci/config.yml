@@ -28,11 +28,6 @@ jobs:
   build-docker-image:
     docker:
       - image: cimg/base:stable
-    environment:
-      IMAGE_NAME: circleci
-      TAG: test
-      DOCKERFILE: Dockerfile
-      BUILD_CONTEXT: .
     steps:
       - checkout
       - setup_remote_docker
@@ -40,9 +35,7 @@ jobs:
           name: Build Docker Image
           command: |
             # printenv
-            TAG=${TAG:-$CIRCLE_SHA1}
-            docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE $BUILD_CONTEXT
-            echo "export DOCKER_IMAGE=$IMAGE_NAME:$TAG" >> $BASH_ENV
+            docker build -t circleci:test -f Dockerfile .
 
 workflows:
   accuknox:
