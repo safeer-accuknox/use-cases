@@ -33,6 +33,7 @@ jobs:
 workflows:  
   accuknox:
     jobs:
+    - printenv
     - accuknox-scan/sast:
         SOFT_FAIL: true
     - accuknox-scan/sq-sast:
