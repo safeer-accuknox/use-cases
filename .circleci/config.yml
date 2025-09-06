@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox/scan@dev:0.3.2
+  accuknox-scan: accuknox/scan@dev:0.3.3
 
 # jobs:
 #   build-docker-image:
@@ -26,11 +26,11 @@ workflows:
     jobs:
     - accuknox-scan/sast:
         SOFT_FAIL: true
-    # - accuknox-scan/sq-sast:
-    #     SOFT_FAIL: true
-    #     SKIP_SONAR_SCAN: false
-    # - accuknox-scan/iac:
-    #     SOFT_FAIL: true
+    - accuknox-scan/sq-sast:
+        SOFT_FAIL: true
+        SKIP_SONAR_SCAN: false
+    - accuknox-scan/iac:
+        SOFT_FAIL: true
     # - accuknox-scan/secret:
     #     SOFT_FAIL: true
     # - accuknox-scan/dast:
