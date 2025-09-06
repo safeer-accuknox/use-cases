@@ -3,7 +3,16 @@ version: 2.1
 orbs:
   accuknox-scan: accuknox/scan@dev:0.3.3
 
-# jobs:
+jobs:
+  printenv:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: printenv
+          command: |
+            printenv
 #   build-docker-image:
 #     docker:
 #       - image: cimg/base:stable
