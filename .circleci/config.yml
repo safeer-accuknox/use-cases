@@ -1,47 +1,47 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox/scan@1.0.1
+  accuknox-scan: accuknox/scan@dev:0.3.0
 
-jobs:
-  build-docker-image:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker Image
-          command: |
-            # printenv
-            docker build -t circleci:test -f Dockerfile .
-            docker save circleci:test -o image.tar
-      - persist_to_workspace:
-          root: .
-          paths:
-          - image.tar
+# jobs:
+#   build-docker-image:
+#     docker:
+#       - image: cimg/base:stable
+#     steps:
+#       - checkout
+#       - setup_remote_docker
+#       - run:
+#           name: Build Docker Image
+#           command: |
+#             # printenv
+#             docker build -t circleci:test -f Dockerfile .
+#             docker save circleci:test -o image.tar
+#       - persist_to_workspace:
+#           root: .
+#           paths:
+#           - image.tar
 
 workflows:  
   accuknox:
     jobs:
     - accuknox-scan/sast:
         SOFT_FAIL: true
-    - accuknox-scan/sq-sast:
-        SOFT_FAIL: true
-        SKIP_SONAR_SCAN: false
-    - accuknox-scan/iac:
-        SOFT_FAIL: true
-    - accuknox-scan/secret:
-        SOFT_FAIL: true
-    - accuknox-scan/dast:
-        SOFT_FAIL: true
-        TARGET_URL: "http://testphp.vulnweb.com"
-    - build-docker-image
-    - accuknox-scan/container:
-        requires:
-        - build-docker-image
-        IMAGE_NAME: circleci
-        IMAGE_TAR: image.tar
-        TAG: test
-        SOFT_FAIL: true
-        SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
+    # - accuknox-scan/sq-sast:
+    #     SOFT_FAIL: true
+    #     SKIP_SONAR_SCAN: false
+    # - accuknox-scan/iac:
+    #     SOFT_FAIL: true
+    # - accuknox-scan/secret:
+    #     SOFT_FAIL: true
+    # - accuknox-scan/dast:
+    #     SOFT_FAIL: true
+    #     TARGET_URL: "http://testphp.vulnweb.com"
+    # - build-docker-image
+    # - accuknox-scan/container:
+    #     requires:
+    #     - build-docker-image
+    #     IMAGE_NAME: circleci
+    #     IMAGE_TAR: image.tar
+    #     TAG: test
+    #     SOFT_FAIL: true
+    #     SEVERITY: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
