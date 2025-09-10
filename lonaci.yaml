@@ -1,0 +1,93 @@
+env:
+  contexts:
+  - name: CustomContext
+    urls:
+    - https://gouassou.lonaci.ci/
+    includePaths:
+    - https://gouassou.lonaci.ci/.*
+    authentication:
+      method: form
+      parameters:
+        loginPageUrl: https://gouassou.lonaci.ci/compte/login
+        loginRequestUrl: https://gouassou.lonaci.ci/validate/login
+        loginRequestBody: "_token={%password%}&pseudo={%username%}&password=test123123 "
+      verification:
+        method: autodetect
+        pollFrequency: 60
+        pollUnits: requests
+        pollUrl: ""
+        pollPostData: ""
+    sessionManagement:
+      method: cookie
+    technology: {}
+    structure: {}
+    users:
+    - name: TEST2025
+      credentials:
+        password: password
+        username: TEST2025
+  parameters: {}
+jobs:
+- type: alertFilter
+  parameters: {}
+- type: passiveScan-config
+  parameters: {}
+- type: spider
+  parameters:
+    context: CustomContext
+    user: TEST2025
+    url: ""
+    maxDuration: 0
+    maxDepth: 0
+    maxChildren: 0
+  tests:
+  - name: At least 100 URLs found
+    type: stats
+    onFail: INFO
+    statistic: automation.spider.urls.added
+    operator: '>='
+    value: 100
+- type: spiderAjax
+  parameters:
+    context: CustomContext
+    user: TEST2025
+    url: ""
+    runOnlyIfModern: false
+  tests:
+  - name: At least 100 URLs found
+    type: stats
+    onFail: INFO
+    statistic: spiderAjax.urls.added
+    operator: '>='
+    value: 100
+- type: activeScan
+  parameters:
+    context: CustomContext
+    user: TEST2025
+    policy: ""
+    maxRuleDurationInMins: 0
+    maxScanDurationInMins: 3
+    maxAlertsPerRule: 0
+  policyDefinition:
+    defaultStrength: medium
+    defaultThreshold: medium
+- type: report
+  parameters:
+    template: traditional-json
+    theme: original
+    reportDir: /zap/wrk
+    reportFile: results.json
+    reportTitle: ZAP Scanning Report
+    reportDescription:  Detailed analysis of security vulnerabilities identified through ZAP (Zed Attack Proxy) scanning, including potential risks, recommended mitigations, and overall security posture evaluation.
+    displayReport: false
+  risks:
+  - info
+  - low
+  - medium
+  - high
+  confidences:
+  - falsepositive
+  - low
+  - medium
+  - high
+  - confirmed

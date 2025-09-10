@@ -3,7 +3,7 @@ name: AccuKnox Container Scan
 on:
   push:
     branches:
-      - all
+      - lonaci-test
 
 jobs:
   scan-container:
@@ -13,38 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: "Run Accuknox SAST"
-        uses:  r3d-shadow/sast-scan-action@main
-        with:
-          sonar_token: ${{ secrets.SONAR_CLOUD_TOKEN }}
-          sonar_host_url: "https://sonarcloud.io"
-          sonar_project_key: "r3d-shadow_azure-plugin-test"
-          sonar_organization_id: "r3d-shadow"
-          accuknox_endpoint: "cspm.demo.accuknox.com"
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-          tenant_id: 3730
-          label: "SPOC"
-          input_soft_fail: true
-          skip_sonar_scan: true
+      - name: Set up AccuKnox ASPM Scanner
+        run: |
+          curl -L https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.10.1/accuknox-aspm-scanner_linux_x86_64 \
+            -o /usr/bin/accuknox-aspm-scanner
+          chmod +x /usr/bin/accuknox-aspm-scanner
 
-      # - name: "Run Accuknox SAST"
-      #   uses: accuknox/sast-scan-opengrep-action@1.0.0
-      #   with:
-      #     accuknox_endpoint: "cspm.demo.accuknox.com"
-      #     accuknox_tenant: 3730
-      #     accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-      #     accuknox_label: "SPOC"
-      #     input_soft_fail: "true"
-      #     upload_artifact: false
-
-      #   - name: AccuKnox Secret Scan
-      #     uses: accuknox/secret-scan-action@v1.0.1
-      #     with:
-      #       token: ${{ secrets.ACCUKNOX_TOKEN }}
-      #       tenant_id: 3730
-      #       label: "SPOC"
-      #       endpoint:  "cspm.demo.accuknox.com"
-      #       fail: false
-      #       use_extended_ruleset: true
-
-        
+      - name: Run DAST Scan
+        env:
+          ACCUKNOX_TOKEN: ${{ secrets.ACCUKNOX_TOKEN }}
+          ACCUKNOX_TENANT: 3730
+          ACCUKNOX_ENDPOINT:  "cspm.demo.accuknox.com"
+          ACCUKNOX_LABEL: "SPOC"
+        run: |
+          accuknox-aspm-scanner scan dast \
+            --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/lonaci.yaml" \
+            --container-mode
