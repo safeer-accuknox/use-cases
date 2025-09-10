@@ -28,7 +28,8 @@ jobs:
           DEBUG: "TRUE"
         run: |
           mkdir /tmp/scan-dir
+          cp dast-config.yaml /tmp/scan-dir
           cd /tmp/scan-dir
           /tmp/accuknox-aspm-scanner scan dast \
-            --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/lonaci.yaml" \
+            --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/dast-config.yaml" \
             --container-mode
