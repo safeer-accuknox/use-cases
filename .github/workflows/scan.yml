@@ -25,7 +25,7 @@ jobs:
           ACCUKNOX_TENANT: 3730
           ACCUKNOX_ENDPOINT:  "cspm.demo.accuknox.com"
           ACCUKNOX_LABEL: "SPOC"
-          # DEBUG: "TRUE"
+          DEBUG: "TRUE"
         run: |
           mkdir /tmp/scan-dir
           cd /tmp/scan-dir
