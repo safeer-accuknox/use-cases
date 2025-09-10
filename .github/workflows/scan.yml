@@ -15,9 +15,9 @@ jobs:
 
       - name: Set up AccuKnox ASPM Scanner
         run: |
-          curl -L https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.10.1/accuknox-aspm-scanner_linux_x86_64 \
-            -o /usr/bin/accuknox-aspm-scanner
-          chmod +x /usr/bin/accuknox-aspm-scanner
+          sudo curl -L https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.10.1/accuknox-aspm-scanner_linux_x86_64 \
+            -o /tmp/accuknox-aspm-scanner
+          chmod +x /tmp/accuknox-aspm-scanner
 
       - name: Run DAST Scan
         env:
