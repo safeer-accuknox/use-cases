@@ -1,4 +1,4 @@
-name: AccuKnox Container Scan
+name: AccuKnox DAST Scan
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - lonaci-test
 
 jobs:
-  scan-container:
+  scan-dast:
     runs-on: ubuntu-latest
 
     steps:
