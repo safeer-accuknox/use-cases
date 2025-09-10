@@ -25,7 +25,7 @@ jobs:
           ACCUKNOX_TENANT: 3730
           ACCUKNOX_ENDPOINT:  "cspm.demo.accuknox.com"
           ACCUKNOX_LABEL: "SPOC"
-          DEBUG: "TRUE"
+          # DEBUG: "TRUE"
         run: |
           mkdir /tmp/scan-dir
           cp dast-config.yaml /tmp/scan-dir
@@ -33,3 +33,4 @@ jobs:
           /tmp/accuknox-aspm-scanner scan dast \
             --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/dast-config.yaml" \
             --container-mode
+            
