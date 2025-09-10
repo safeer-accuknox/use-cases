@@ -26,6 +26,6 @@ jobs:
           ACCUKNOX_ENDPOINT:  "cspm.demo.accuknox.com"
           ACCUKNOX_LABEL: "SPOC"
         run: |
-          accuknox-aspm-scanner scan dast \
+          /tmp/accuknox-aspm-scanner scan dast \
             --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/lonaci.yaml" \
             --container-mode
