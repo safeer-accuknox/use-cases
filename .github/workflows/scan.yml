@@ -15,7 +15,7 @@ jobs:
 
       - name: Set up AccuKnox ASPM Scanner
         run: |
-          sudo curl -L https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.10.1/accuknox-aspm-scanner_linux_x86_64 \
+          curl -L https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.10.1/accuknox-aspm-scanner_linux_x86_64 \
             -o /tmp/accuknox-aspm-scanner
           chmod +x /tmp/accuknox-aspm-scanner
 
