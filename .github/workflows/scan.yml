@@ -30,6 +30,7 @@ jobs:
           mkdir /tmp/scan-dir
           cp dast-config.yaml /tmp/scan-dir
           cd /tmp/scan-dir
+          chmod -R 777 .
           /tmp/accuknox-aspm-scanner scan dast \
             --command "zap.sh -loglevel debug -cmd -autorun /zap/wrk/dast-config.yaml" \
             --container-mode
