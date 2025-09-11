@@ -1,9 +1,7 @@
 name: AccuKnox DAST Scan
 
 on:
-  push:
-    branches:
-      - lonaci-test
+  workflow_dispatch:
 
 jobs:
   scan-dast:
