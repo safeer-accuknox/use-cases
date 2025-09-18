@@ -23,9 +23,8 @@ pipeline {
       steps {
         sh '''
           set -e
-          pip install --upgrade \
-              https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.13.4/accuknox_aspm_scanner-0.13.4-py3-none-any.whl \
-              --break-system-packages
+          python3 -m pip install --user \
+            https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.13.4/accuknox_aspm_scanner-0.13.4-py3-none-any.whl --break-system-packages
         '''
       }
     }
@@ -40,7 +39,7 @@ pipeline {
           if (env.BRANCH?.trim())        { args += " --branch ${env.BRANCH}" }
           if (env.EXCLUDE_PATHS?.trim()) { args += " --exclude-paths '${env.EXCLUDE_PATHS}'" }
 
-          def fullCmd = "accuknox-aspm-scanner scan ${softFailArg} secret --command \"${command}${args}\" --container-mode"
+          def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} secret --command \"${command}${args}\" --container-mode"
           echo "Running: ${fullCmd}"
           sh fullCmd
         }
