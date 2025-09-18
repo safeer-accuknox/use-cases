@@ -2,10 +2,7 @@ pipeline {
   agent any
 
   environment {
-    RESULTS = ""
-    BRANCH = "all"
-    EXCLUDE_PATHS = ""
-    SOFT_FAIL = "false" 
+    DISABLE_SPINNER = "TRUE"
 
     ACCUKNOX_ENDPOINT = "cspm.demo.accuknox.com"
     ACCUKNOX_LABEL = "ROOTFS"
@@ -31,6 +28,14 @@ pipeline {
 
     stage('Run Secret Scan') {
       steps {
+        environment {
+          DISABLE_SPINNER = "TRUE"
+
+          RESULTS = ""
+          BRANCH = "all"
+          EXCLUDE_PATHS = ""
+          SOFT_FAIL = "true" 
+        }
         script {
           def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
           def command = 'git file://.'
@@ -45,6 +50,91 @@ pipeline {
         }
       }
     }
+
+    stage('Run Container Scan') {
+      steps {
+        environment {
+          SOFT_FAIL = "true"
+          IMAGE = "test"
+          IMAGE_TAG = "latest"
+          SEVERITY = "CRITICAL,HIGH,WARNING,MEDIUM,LOW,INFO"
+        }
+        script {
+          def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+
+          echo "Building Docker image ${env.IMAGE}:${env.IMAGE_TAG}..."
+          sh "docker build -t ${env.IMAGE}:${env.IMAGE_TAG} -f Dockerfile ."
+          def cmd = "image ${env.IMAGE}:${env.IMAGE_TAG}"
+          if (env.SEVERITY?.trim())   { cmd += " --severity ${env.SEVERITY}" }
+          def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} container --command \"${cmd}\" --container-mode"
+          echo "Running: ${fullCmd}"
+          sh fullCmd
+        }
+      }
+    }
+
+    stage('Run IaC Scan') {
+      steps {
+        environment {
+          SOFT_FAIL = "true"
+          DIRECTORY = "."
+          COMPACT = "true"
+          QUIET = "true"
+          FILE = ""
+          FRAMEWORK = ""
+        }
+        script {
+          def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+          def cmdArgs = ""
+          if (env.FILE?.trim())       { cmdArgs += " --file ${env.FILE}" }
+          if (env.DIRECTORY?.trim())  { cmdArgs += " --directory ${env.DIRECTORY}" }
+          if (env.COMPACT == 'true')  { cmdArgs += " --compact" }
+          if (env.QUIET == 'true')    { cmdArgs += " --quiet" }
+          if (env.FRAMEWORK?.trim())  { cmdArgs += " --framework ${env.FRAMEWORK}" }
+          def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} iac --command \"${cmdArgs}\" --container-mode"
+          echo "Running: ${fullCmd}"
+          sh fullCmd
+        }
+      }
+    }
   }
 
+  stage('Run SAST Scan') {
+    steps {
+      environment {
+        SOFT_FAIL = "true"
+      }
+      script {
+        def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+        def command = "scan ."
+        def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} sast --command \"${command}\" --container-mode"
+
+        echo "Running: ${fullCmd}"
+        sh fullCmd
+      }
+    }
+  }
+
+  stage('Run DAST Scan') {
+    steps {
+      environment {
+        SOFT_FAIL = "true"
+        TARGET_URL = "https://juice-shop.herokuapp.com/"
+        DAST_SCAN_SCRIPT = "zap-baseline.py"
+      }
+      script {
+        def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+        sh '''
+          mkdir -p /tmp/scan-dir
+          chmod 777 /tmp/scan-dir
+          cd /tmp/scan-dir
+        '''
+        def args = "${env.DAST_SCAN_SCRIPT} -t ${env.TARGET_URL} -I"
+        def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} dast --command \"${args}\" --container-mode"
+        echo "Running: ${fullCmd}"
+        sh fullCmd
+        sh "cd -"
+      }
+    }
+  }
 }
