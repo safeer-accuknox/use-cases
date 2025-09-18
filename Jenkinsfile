@@ -27,15 +27,15 @@ pipeline {
     }
 
     stage('Run Secret Scan') {
-      steps {
-        environment {
-          DISABLE_SPINNER = "TRUE"
+      environment {
+        DISABLE_SPINNER = "TRUE"
 
-          RESULTS = ""
-          BRANCH = "all"
-          EXCLUDE_PATHS = ""
-          SOFT_FAIL = "true" 
-        }
+        RESULTS = ""
+        BRANCH = "all"
+        EXCLUDE_PATHS = ""
+        SOFT_FAIL = "true" 
+      }
+      steps {
         script {
           def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
           def command = 'git file://.'
@@ -52,13 +52,13 @@ pipeline {
     }
 
     stage('Run Container Scan') {
+      environment {
+        SOFT_FAIL = "true"
+        IMAGE = "test"
+        IMAGE_TAG = "latest"
+        SEVERITY = "CRITICAL,HIGH,WARNING,MEDIUM,LOW,INFO"
+      }
       steps {
-        environment {
-          SOFT_FAIL = "true"
-          IMAGE = "test"
-          IMAGE_TAG = "latest"
-          SEVERITY = "CRITICAL,HIGH,WARNING,MEDIUM,LOW,INFO"
-        }
         script {
           def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
 
@@ -74,15 +74,15 @@ pipeline {
     }
 
     stage('Run IaC Scan') {
+      environment {
+        SOFT_FAIL = "true"
+        DIRECTORY = "."
+        COMPACT = "true"
+        QUIET = "true"
+        FILE = ""
+        FRAMEWORK = ""
+      }
       steps {
-        environment {
-          SOFT_FAIL = "true"
-          DIRECTORY = "."
-          COMPACT = "true"
-          QUIET = "true"
-          FILE = ""
-          FRAMEWORK = ""
-        }
         script {
           def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
           def cmdArgs = ""
@@ -100,10 +100,10 @@ pipeline {
   }
 
   stage('Run SAST Scan') {
+    environment {
+      SOFT_FAIL = "true"
+    }
     steps {
-      environment {
-        SOFT_FAIL = "true"
-      }
       script {
         def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
         def command = "scan ."
@@ -116,12 +116,12 @@ pipeline {
   }
 
   stage('Run DAST Scan') {
+    environment {
+      SOFT_FAIL = "true"
+      TARGET_URL = "https://juice-shop.herokuapp.com/"
+      DAST_SCAN_SCRIPT = "zap-baseline.py"
+    }
     steps {
-      environment {
-        SOFT_FAIL = "true"
-        TARGET_URL = "https://juice-shop.herokuapp.com/"
-        DAST_SCAN_SCRIPT = "zap-baseline.py"
-      }
       script {
         def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
         sh '''
