@@ -5,7 +5,7 @@ pipeline {
     DISABLE_SPINNER = "TRUE"
 
     ACCUKNOX_ENDPOINT = "cspm.demo.accuknox.com"
-    ACCUKNOX_LABEL = "ROOTFS"
+    ACCUKNOX_LABEL = "ASPMPOC"
     ACCUKNOX_TOKEN = credentials('ACCUKNOX_TOKEN')
   }
 
