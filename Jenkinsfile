@@ -97,44 +97,44 @@ pipeline {
         }
       }
     }
-  }
 
-  stage('Run SAST Scan') {
-    environment {
-      SOFT_FAIL = "true"
-    }
-    steps {
-      script {
-        def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
-        def command = "scan ."
-        def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} sast --command \"${command}\" --container-mode"
+    stage('Run SAST Scan') {
+      environment {
+        SOFT_FAIL = "true"
+      }
+      steps {
+        script {
+          def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+          def command = "scan ."
+          def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} sast --command \"${command}\" --container-mode"
 
-        echo "Running: ${fullCmd}"
-        sh fullCmd
+          echo "Running: ${fullCmd}"
+          sh fullCmd
+        }
       }
     }
-  }
 
-  stage('Run DAST Scan') {
-    environment {
-      SOFT_FAIL = "true"
-      TARGET_URL = "https://juice-shop.herokuapp.com/"
-      DAST_SCAN_SCRIPT = "zap-baseline.py"
-    }
-    steps {
-      script {
-        def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
-        sh '''
-          mkdir -p /tmp/scan-dir
-          chmod 777 /tmp/scan-dir
-          cd /tmp/scan-dir
-        '''
-        def args = "${env.DAST_SCAN_SCRIPT} -t ${env.TARGET_URL} -I"
-        def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} dast --command \"${args}\" --container-mode"
-        echo "Running: ${fullCmd}"
-        sh fullCmd
-        sh "cd -"
+    stage('Run DAST Scan') {
+      environment {
+        SOFT_FAIL = "true"
+        TARGET_URL = "https://juice-shop.herokuapp.com/"
+        DAST_SCAN_SCRIPT = "zap-baseline.py"
+      }
+      steps {
+        script {
+          def softFailArg = (env.SOFT_FAIL == 'true') ? '--softfail' : ''
+          sh '''
+            mkdir -p /tmp/scan-dir
+            chmod 777 /tmp/scan-dir
+            cd /tmp/scan-dir
+          '''
+          def args = "${env.DAST_SCAN_SCRIPT} -t ${env.TARGET_URL} -I"
+          def fullCmd = "~/.local/bin/accuknox-aspm-scanner scan ${softFailArg} dast --command \"${args}\" --container-mode"
+          echo "Running: ${fullCmd}"
+          sh fullCmd
+          sh "cd -"
+        }
       }
     }
-  }
+  } 
 }
