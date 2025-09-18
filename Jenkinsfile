@@ -6,6 +6,11 @@ pipeline {
     BRANCH = "all"
     EXCLUDE_PATHS = ""
     SOFT_FAIL = "false" 
+
+    ACCUKNOX_ENDPOINT = "cspm.demo.accuknox.com"
+    ACCUKNOX_TENANT = "3731"
+    ACCUKNOX_LABEL = "ROOTFS"
+    ACCUKNOX_TOKEN = credentials('ACCUKNOX_TOKEN')
   }
 
   stages {
@@ -36,24 +41,10 @@ pipeline {
 
           def fullCmd = "accuknox-aspm-scanner scan ${softFailArg} secret --command \"${command}${args}\" --container-mode"
           echo "Running: ${fullCmd}"
-
-          if (env.SOFT_FAIL == 'true') {
-            def status = sh(script: fullCmd, returnStatus: true)
-            if (status != 0) {
-              currentBuild.result = 'UNSTABLE'
-              echo "Scanner exited with ${status} (soft-fail enabled) — build marked UNSTABLE."
-            }
-          } else {
-            sh fullCmd
-          }
+          sh fullCmd
         }
       }
     }
   }
 
-  post {
-    always {
-      archiveArtifacts artifacts: 'results/**/*, scan_results/**/*', allowEmptyArchive: true
-    }
-  }
 }
