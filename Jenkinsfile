@@ -20,7 +20,7 @@ pipeline {
         sh '''
           set -e
           python3 -m pip install --upgrade pip
-          pip install https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.12.1/accuknox_aspm_scanner-0.12.1-py3-none-any.whl
+          pip install https://github.com/accuknox/aspm-scanner-cli/releases/download/v0.12.1/accuknox_aspm_scanner-0.12.1-py3-none-any.whl  --break-system-packages
         '''
       }
     }
