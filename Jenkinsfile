@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'python:3.11-slim'
-      args  '--user root:root' // run as root so pip can install; change if you prefer non-root
-    }
-  }
+  agent any
 
   environment {
     RESULTS = ""
