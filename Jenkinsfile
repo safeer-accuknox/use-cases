@@ -8,7 +8,7 @@ pipeline {
     SOFT_FAIL = "false" 
 
     ACCUKNOX_ENDPOINT = "cspm.demo.accuknox.com"
-    ACCUKNOX_TENANT = "3731"
+    ACCUKNOX_TENANT = "3730"
     ACCUKNOX_LABEL = "ROOTFS"
     ACCUKNOX_TOKEN = credentials('ACCUKNOX_TOKEN')
   }
