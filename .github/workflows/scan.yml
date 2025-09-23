@@ -51,9 +51,20 @@ jobs:
           use_extended_ruleset: true
 
 
+      - name: "Accuknox SAST"
+        uses: accuknox/sast-scan-opengrep-action@1.0.0
+        with:
+          accuknox_endpoint: "cspm.demo.accuknox.com"
+          accuknox_tenant: 3730
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+          accuknox_label: "SPOC"
+          input_soft_fail: "true"
+          upload_artifact: false
+
       - name: Build Docker image
         run: |
           docker build -t my-app:latest .
+          sudo rm -rf results.json
           
       - name: AccuKnox Container Scan
         uses: accuknox/container-scan-action@1.0.0
@@ -65,16 +76,6 @@ jobs:
           image: "my-app"
           tag: "latest"
           severity: "CRITICAL"
-
-      - name: "Accuknox SAST"
-        uses: accuknox/sast-scan-opengrep-action@1.0.0
-        with:
-          accuknox_endpoint: "cspm.demo.accuknox.com"
-          accuknox_tenant: 3730
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-          accuknox_label: "SPOC"
-          input_soft_fail: "true"
-          upload_artifact: false
 
       - name: AccuKnox DAST
         uses: accuknox/dast-scan-action@v1.0.0
