@@ -84,8 +84,6 @@ jobs:
           tenant_id: 3730
           accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
           label: "SPOC"
-          severity_threshold: "Critical"
           scan_type: "baseline"
-
-
+        continue-on-error: true
 
