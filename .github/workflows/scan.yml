@@ -27,6 +27,15 @@ jobs:
       #     input_soft_fail: true
       #     skip_sonar_scan: true
 
+      - name: Accuknox IaC
+        uses: accuknox/iac-scan-action@v1.0.0
+        with:
+          soft_fail: "true"
+          token: ${{ secrets.ACCUKNOX_TOKEN }}
+          tenant_id: 3730
+          label: "SPOC"
+          endpoint: "cspm.demo.accuknox.com"
+
       - name: AccuKnox Secret Scan
         uses: accuknox/secret-scan-action@v1.0.1
         with:
@@ -36,15 +45,6 @@ jobs:
           endpoint:  "cspm.demo.accuknox.com"
           fail: false
           use_extended_ruleset: true
-                    
-      - name: Accuknox IaC
-        uses: accuknox/iac-scan-action@v1.0.0
-        with:
-          soft_fail: "true"
-          token: ${{ secrets.ACCUKNOX_TOKEN }}
-          tenant_id: 3730
-          label: "SPOC"
-          endpoint: "cspm.demo.accuknox.com"
 
       - name: Build Docker image
         run: |
