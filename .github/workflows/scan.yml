@@ -6,7 +6,7 @@ on:
       - all
 
 jobs:
-  scan-container:
+  ak-scans:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,52 +35,54 @@ jobs:
           tenant_id: 3730
           label: "SPOC"
           endpoint: "cspm.demo.accuknox.com"
+          output_format: json
+          output_file_path: "./results.json"
 
-      - name: AccuKnox Secret Scan
-        uses: accuknox/secret-scan-action@v1.0.1
-        with:
-          token: ${{ secrets.ACCUKNOX_TOKEN }}
-          tenant_id: 3730
-          label: "SPOC"
-          endpoint:  "cspm.demo.accuknox.com"
-          fail: false
-          use_extended_ruleset: true
+      # - name: AccuKnox Secret Scan
+      #   uses: accuknox/secret-scan-action@v1.0.1
+      #   with:
+      #     token: ${{ secrets.ACCUKNOX_TOKEN }}
+      #     tenant_id: 3730
+      #     label: "SPOC"
+      #     endpoint:  "cspm.demo.accuknox.com"
+      #     fail: false
+      #     use_extended_ruleset: true
 
-      - name: Build Docker image
-        run: |
-          docker build -t my-app:latest .
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t my-app:latest .
 
-      - name: AccuKnox Container Scan
-        uses: accuknox/container-scan-action@1.0.0
-        with:
-          endpoint: "cspm.demo.accuknox.com"
-          tenant_id: 3730
-          token: ${{ secrets.ACCUKNOX_TOKEN }}
-          label: "SPOC"
-          image: "my-app"
-          tag: "latest"
-          severity: "CRITICAL"
+      # - name: AccuKnox Container Scan
+      #   uses: accuknox/container-scan-action@1.0.0
+      #   with:
+      #     endpoint: "cspm.demo.accuknox.com"
+      #     tenant_id: 3730
+      #     token: ${{ secrets.ACCUKNOX_TOKEN }}
+      #     label: "SPOC"
+      #     image: "my-app"
+      #     tag: "latest"
+      #     severity: "CRITICAL"
 
-      - name: "Accuknox SAST"
-        uses: accuknox/sast-scan-opengrep-action@1.0.0
-        with:
-          accuknox_endpoint: "cspm.demo.accuknox.com"
-          accuknox_tenant: 3730
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-          accuknox_label: "SPOC"
-          input_soft_fail: "true"
-          upload_artifact: false
+      # - name: "Accuknox SAST"
+      #   uses: accuknox/sast-scan-opengrep-action@1.0.0
+      #   with:
+      #     accuknox_endpoint: "cspm.demo.accuknox.com"
+      #     accuknox_tenant: 3730
+      #     accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+      #     accuknox_label: "SPOC"
+      #     input_soft_fail: "true"
+      #     upload_artifact: false
 
-      - name: AccuKnox DAST
-        uses: accuknox/dast-scan-action@v1.0.0
-        with:
-          target_url: "http://testphp.vulnweb.com"
-          accuknox_endpoint: "cspm.demo.accuknox.com"
-          tenant_id: 3730
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-          label: "SPOC"
-          severity_threshold: "Critical"
-          scan_type: "baseline"
+      # - name: AccuKnox DAST
+      #   uses: accuknox/dast-scan-action@v1.0.0
+      #   with:
+      #     target_url: "http://testphp.vulnweb.com"
+      #     accuknox_endpoint: "cspm.demo.accuknox.com"
+      #     tenant_id: 3730
+      #     accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+      #     label: "SPOC"
+      #     severity_threshold: "Critical"
+      #     scan_type: "baseline"
 
 
 
