@@ -27,18 +27,18 @@ jobs:
       #     input_soft_fail: true
       #     skip_sonar_scan: true
 
-      # - name: Run IaC scan
-      #   uses: Vickydew1/iac-scan-action@main
-      #   with:
-      #     directory: "."
-      #     compact: true
-      #     quiet: true 
-      #     output_format: json
-      #     output_file_path: "./results.json"
-      #     token: ${{ secrets.ACCUKNOX_TOKEN }}
-      #     tenant_id: 3730
-      #     label: "SPOC"
-      #     endpoint: "cspm.demo.accuknox.com"
+      - name: Run IaC scan
+        uses: accuknox/iac-scan-action@v1.0.0
+        with:
+          directory: "."
+          compact: true
+          quiet: true 
+          output_format: json
+          output_file_path: "./results.json"
+          token: ${{ secrets.ACCUKNOX_TOKEN }}
+          tenant_id: 3730
+          label: "SPOC"
+          endpoint: "cspm.demo.accuknox.com"
 
       - name: AccuKnox Secret Scan
         uses: accuknox/secret-scan-action@v1.0.1
