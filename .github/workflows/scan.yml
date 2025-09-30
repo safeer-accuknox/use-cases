@@ -34,7 +34,7 @@ jobs:
           compact: true
           quiet: true 
           output_format: json
-          output_file_path: "./results.json"
+          output_file_path: "./results"
           token: ${{ secrets.ACCUKNOX_TOKEN }}
           tenant_id: 3730
           label: "SPOC"
