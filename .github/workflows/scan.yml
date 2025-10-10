@@ -23,6 +23,7 @@ jobs:
           dast_scan_type: "baseline"
           severity_threshold: "HIGH"
           soft_fail: "true"
+          
 
       # - name: "Run Accuknox SAST"
       #   uses:  r3d-shadow/sast-scan-action@main
