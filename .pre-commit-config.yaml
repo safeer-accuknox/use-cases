@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: accuknox-secret-scan
+        name: AccuKnox Secret Scan
+        entry: accuknox-aspm-scanner scan secret --command "scan ."
+        language: system
+        types: [text]
+        pass_filenames: false
