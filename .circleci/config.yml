@@ -41,7 +41,8 @@ workflows:
         SKIP_SONAR_SCAN: false
     - accuknox-scan/iac:
         SOFT_FAIL: false
-        COMPACT: true
+        COMPACT: false
+        QUIET: false
     - accuknox-scan/secret:
         SOFT_FAIL: true
     - accuknox-scan/dast:
