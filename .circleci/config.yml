@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  accuknox-scan: accuknox/scan@1.0.2
+  accuknox-scan: accuknox/scan@dev:1.0.3
 
 jobs:
   printenv:
