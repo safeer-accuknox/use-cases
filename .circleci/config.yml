@@ -40,7 +40,7 @@ workflows:
         SOFT_FAIL: true
         SKIP_SONAR_SCAN: false
     - accuknox-scan/iac:
-        SOFT_FAIL: true
+        SOFT_FAIL: false
         COMPACT: true
     - accuknox-scan/secret:
         SOFT_FAIL: true
